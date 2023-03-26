@@ -2,8 +2,9 @@
 #include "mainwindow.h"
 #include <iostream>
 #include "databasecontrol.h"
-#include "recipe.h"
 #include "ingredient.h"
+#include "ingredient.h"
+#include "recipe.h"
 #include <QApplication>
 
 DatabaseManager globalDatabase;
@@ -15,15 +16,18 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.setWindowTitle("Recipe System");
-    Recipe sandwichRecipe;
+    Recipe sandwichRecipe("Sandwich2");
+    Recipe cakeRecipe("Cake");
     Ingredient *eggs = new Ingredient("Eggs", 3, 5.00);
     Ingredient *lettuce = new Ingredient("Lettuce", 1, 6.00);
     sandwichRecipe += *eggs;
     sandwichRecipe += *lettuce;
     sandwichRecipe.listIngredients();
+    sandwichRecipe.addDietaryRestriction(Vegan);
+    qDebug() << sandwichRecipe.hasDietaryRestriction(Vegan);
 
     sandwichRecipe.preSave();
-    qDebug() << sandwichRecipe.getTotalCost();
+    qDebug() << QString::fromStdString(Global::numberToString(sandwichRecipe.getTotalCost()));
     w.show();
     return a.exec();
 }
