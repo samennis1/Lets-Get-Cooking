@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     databasecontrol.cpp \
+    databaseexception.cpp \
     databasemanager.cpp \
     global.cpp \
     ingredient.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     databasecontrol.h \
+    databaseexception.h \
     databasemanager.h \
     global.h \
     ingredient.h \
