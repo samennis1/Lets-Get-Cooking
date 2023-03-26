@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlRecord>
+#include "databaseexception.h"
 
 using namespace std;
 
@@ -13,13 +14,13 @@ DatabaseManager::DatabaseManager()
     db.setDatabaseName(this->path);
 
     if(!db.open()) {
-        cout << "Error!" << endl;
+        throw DatabaseException("Database Unable To Connect");
     } else {
         cout << "Found!" << endl;
     }
 
     QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT EXISTS Recipe (name VARCHAR(30) NOT NULL);");
+    query.prepare("CREATE TABLE IF NOT EXISTS Recipe (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);");
     if(query.exec()) {
         cout << "Success!";
     } else {
@@ -28,8 +29,7 @@ DatabaseManager::DatabaseManager()
 
     QSqlQuery insert;
 
-    insert.prepare("INSERT INTO Recipe (name) VALUES (:name)");
-    insert.bindValue(":name", "cool recipe");
+    insert.prepare("CREATE TABLE IF NOT EXISTS Ingredient (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, quantity INTEGER NOT NULL, recipe_id INTEGER, FOREIGN KEY (recipe_id) REFERENCES Recipe(id));");
     if(insert.exec()) {
         cout << "Success 2" << endl;
     } else {

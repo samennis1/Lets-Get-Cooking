@@ -3,13 +3,12 @@
 #include <string>
 #include <QSqlDatabase>
 #include <qdir.h>
+#include "global.h";
 
 using namespace std;
-class DatabaseManager
+class DatabaseManager : public Global
 {
 public:
-    QDir dir;
-    QString path = QDir::currentPath() + "/database.sqlite";
     DatabaseManager();
 private:
     QSqlDatabase db;
