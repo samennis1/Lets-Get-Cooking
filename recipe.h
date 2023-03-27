@@ -22,7 +22,7 @@ class Recipe : public DatabaseControl
     int id;
 public:
     Recipe(string);
-    bool removeIngredient(string);
+    bool removeIngredient(QString);
     void listIngredients();
     void preSave();
     float getTotalCost();

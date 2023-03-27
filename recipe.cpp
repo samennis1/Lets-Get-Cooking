@@ -48,7 +48,7 @@ Recipe Recipe::operator+=(Ingredient const& a) {
     return *this;
 }
 
-bool Recipe::removeIngredient(string name) {
+bool Recipe::removeIngredient(QString name) {
     bool foundAndDeleted = false;
    for(vector<Ingredient>::iterator i = ingredients.begin(); i != ingredients.end(); i++) {
        if(i->getName() == name) {
@@ -64,18 +64,18 @@ bool Recipe::removeIngredient(string name) {
 void Recipe::listIngredients() {
     cout << "----------" << endl;
     for(vector<Ingredient>::iterator i = ingredients.begin(); i != ingredients.end(); i++) {
-        cout << i->getName() << " : " << i->getQuantity() << endl;
+        qDebug() << i->getName() << " : " << i->getQuantity();
     }
 
     cout << "----------" << endl;
 }
 
 void Recipe::preSave() {
-//    for(Ingredient i : this->ingredients) {
-//        QString query = "SELECT name FROM Ingredients WHERE name = :name, recipe_id = :id";
-//        Global::queryBind(query, ":name", i.getName());
-//        Global::queryBind(query, ":id", this->)
-//    }
+    for(Ingredient i : this->ingredients) {
+        QString query = "SELECT name FROM Ingredients WHERE name = :name, recipe_id = :id";
+        Global::queryBind(query, ":name", i.getName());
+        Global::queryBind(query, ":id", this->id);
+    }
 }
 
 float Recipe::getTotalCost() {
