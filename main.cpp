@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.setWindowTitle("Recipe System");
+    w.setWindowTitle("Let's Get Cooking! v1.2.4");
     Recipe sandwichRecipe("Sandwich2");
     Recipe cakeRecipe("Cake");
     Ingredient *eggs = new Ingredient("Eggs", 3, 5.00);

@@ -1,19 +1,20 @@
 #ifndef INGREDIENT_H
 #define INGREDIENT_H
-#include <string>
+#include <QString>
 
 using namespace std;
 class Ingredient
 {
     int quantity;
-    string name;
+    QString name;
 public:
-    Ingredient(string, int, int);
+    Ingredient(QString, int, double);
     int getQuantity();
-    string getName();
+    QString getName();
     friend class Recipe;
+    friend class IngredientsList;
 private:
-    float totalPrice;
+    double totalPrice;
 };
 
 #endif // INGREDIENT_H
