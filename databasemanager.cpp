@@ -20,7 +20,7 @@ DatabaseManager::DatabaseManager()
     }
 
     QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT EXISTS Recipe (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);");
+    query.prepare("CREATE TABLE IF NOT EXISTS Recipe (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, dietaryBits INTEGER DEFAULT 0);");
     if(query.exec()) {
         cout << "Success!";
     } else {

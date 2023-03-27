@@ -9,7 +9,7 @@ DatabaseControl::DatabaseControl()
 {
 }
 
-void DatabaseControl::preSave() {
+void DatabaseControl::updateSQL() {
     cout << "Default presave";
 }
 
