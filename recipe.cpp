@@ -33,12 +33,6 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
     bool anyRan = runDBStatements.firstStatementWasExecuted;
     bool onlyFirst = runDBStatements.firstStatementWasExecuted && !runDBStatements.secondStatementWasExecuted;
 
-    if(onlyFirst) {
-        qDebug() << "Only First Query ";
-    } else {
-        qDebug() << "Both Queries";
-    }
-
     if(!anyRan) return throw DatabaseException("Error connecting to database");
 
     QSqlQuery recordData = std::move(onlyFirst ? runDBStatements.firstQueryData : runDBStatements.secondQueryData);
@@ -47,13 +41,20 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
     this->name = parsedName.toString();
     this->id = parseID.toInt();
     qDebug() << "Set id to " << this->id;
-
     qDebug() << "Set name to " << this->name;
     qDebug() << "---- END ----";
+
+    if(onlyFirst) {
+        qDebug() << "Only First Query ";
+        fetchIngredients();
+    } else {
+        qDebug() << "Both Queries";
+        setup(queryOne, "queryTwo");
+    }
 }
 
 void Recipe::fetchIngredients() {
-    QString query = "SELECT * FROM Ingredients WHERE recipe_id = :id";
+    QString query = "SELECT * FROM Ingredient WHERE recipe_id = :id";
     Global::queryBind(query, ":id", this->id);
     DBRecordReturn getIngredients = this->execute(query);
    if(getIngredients.success) {
@@ -65,16 +66,19 @@ void Recipe::fetchIngredients() {
 
            Ingredient* found = new Ingredient(name, quantity, price);
            this->ingredients.push_back(*found);
+           qDebug() << "ADDING INGREDIENT " << name << price;
+           getIngredients.returnedData.next();
        }
    }
 }
 
 Ingredient Recipe::addIngredient(Ingredient a) {
    ingredients.push_back(a);
-   QString query = "INSERT INTO Ingredient (name, quantity, recipe_id) VALUES (:name, :quantity, :recipe_id)";
+   QString query = "INSERT INTO Ingredient (name, quantity, recipe_id, price) VALUES (:name, :quantity, :recipe_id, :price)";
    Global::queryBind(query, ":name", a.getName());
    Global::queryBind(query, ":quantity", a.getQuantity());
    Global::queryBind(query, ":recipe_id", this->id);
+   Global::queryBind(query, ":price", a.totalPrice);
    this->execute(query);
    return a;
 }
