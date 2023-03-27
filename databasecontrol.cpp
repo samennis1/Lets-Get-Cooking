@@ -9,10 +9,6 @@ DatabaseControl::DatabaseControl()
 {
 }
 
-void DatabaseControl::updateSQL() {
-    cout << "Default presave";
-}
-
 DBRecordReturn DatabaseControl::execute(QString queryString) {
     DBRecordReturn returnData;
     QSqlQuery saveQuery;

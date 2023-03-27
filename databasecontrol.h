@@ -32,7 +32,7 @@ public:
     DBRecordReturn execute(QString);
     DBResultField executeAndRetrieve(QString, QString);
     DBConditionalReturn findOrCreate(QString, QString);
-    virtual void updateSQL();
+    virtual void updateSQL() = 0;
 };
 
 #endif // DATABASECONTROL_H
