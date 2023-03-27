@@ -24,7 +24,7 @@ public:
         QString sqlSafeReplacement;
         if constexpr (std::is_same_v<Value, std::string>) {
             sqlSafeReplacement = "\"" + QString::fromStdString(replacement) + "\"";
-        } else if constexpr (std::is_same_v<Value, int>) {
+        } else if constexpr (std::is_same_v<Value, int> || std::is_same_v<Value, double>) {
             sqlSafeReplacement = QString::number(replacement);
         } else if constexpr (std::is_same_v<Value, QString>) {
             sqlSafeReplacement = "\"" + replacement + "\"";
