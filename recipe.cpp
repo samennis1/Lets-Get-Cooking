@@ -38,8 +38,10 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
     QSqlQuery recordData = std::move(onlyFirst ? runDBStatements.firstQueryData : runDBStatements.secondQueryData);
     QVariant parseID = Global::parseFieldFromRecord(recordData, "id");
     QVariant parsedName = Global::parseFieldFromRecord(recordData, "name");
+    QVariant dietaryBits = Global::parseFieldFromRecord(recordData, "dietaryBits");
     this->name = parsedName.toString();
     this->id = parseID.toInt();
+    setDietaryBits(dietaryBits.toString());
     qDebug() << "Set id to " << this->id;
     qDebug() << "Set name to " << this->name;
     qDebug() << "---- END ----";
@@ -50,6 +52,16 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
     } else {
         qDebug() << "Both Queries";
         setup(queryOne, "queryTwo");
+    }
+}
+
+void Recipe::setDietaryBits(QString bits) {
+    for(int i = 0; i < bits.size(); i++) {
+        QChar b = bits[i];
+        int bite = b.digitValue();
+        if(bite > 0) {
+            addDietaryRestriction((DietaryRestriction) (i+1));
+        }
     }
 }
 
@@ -110,12 +122,11 @@ void Recipe::listIngredients() {
     cout << "----------" << endl;
 }
 
-void Recipe::preSave() {
-    for(Ingredient i : this->ingredients) {
-        QString query = "SELECT name FROM Ingredients WHERE name = :name, recipe_id = :id";
-        Global::queryBind(query, ":name", i.getName());
-        Global::queryBind(query, ":id", this->id);
-    }
+void Recipe::updateSQL() {
+    QString query = "UPDATE Recipe SET dietaryBits = :bitValue WHERE id = :id";
+    Global::queryBind(query, ":bitValue", std::stoi(this->dietaryRestrictions_.to_string()));
+    Global::queryBind(query, ":id", this->id);
+    this->execute(query);
 }
 
 float Recipe::getTotalCost() {
@@ -129,17 +140,18 @@ float Recipe::getTotalCost() {
 
 void Recipe::addDietaryRestriction(DietaryRestriction restriction)
 {
-    dietaryRestrictions_.set(restriction);
+    dietaryRestrictions_.set(dietaryPositions_[restriction - 1]);
+    qDebug() << QString::fromStdString(dietaryRestrictions_.to_string());
 }
 
 void Recipe::removeDietaryRestriction(DietaryRestriction restriction)
 {
-    dietaryRestrictions_.reset(restriction);
+    dietaryRestrictions_.reset(dietaryPositions_[restriction - 1]);
 }
 
 bool Recipe::hasDietaryRestriction(DietaryRestriction restriction) const
 {
-    return dietaryRestrictions_.test(restriction);
+    return dietaryRestrictions_.test(dietaryPositions_[restriction - 1]);
 }
 
 QString Recipe::getName() {
