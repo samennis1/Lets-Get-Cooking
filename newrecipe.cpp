@@ -43,15 +43,18 @@ void NewRecipe::on_buttonBox_accepted()
     QVector<Ingredient> list = this->displayList->getIngredients().toVector();
     int isVegan = this->ui->veganBox->checkState() ? Vegan : 0;
     int isVeg = this->ui->vegBox->checkState() ? Vegetarian : 0;
-    int isDairyFree = this->ui->dairyBox->checkState() ? DairyFree : 0;
     int isGlutenFree = this->ui->glutenBox->checkState() ? GlutenFree : 0;
+    int isDairyFree = this->ui->dairyBox->checkState() ? DairyFree : 0;
     int isNutFree = this->ui->nutBox->checkState() ? NutFree : 0;
 
     int dietary[5] = {isVegan, isVeg, isDairyFree, isGlutenFree, isNutFree};
 
     for(int d : dietary) {
+        qDebug() << "Passing " << d;
         newRecipe.addDietaryRestriction((DietaryRestriction) d);
     }
+
+    newRecipe.updateSQL();
 
     for(Ingredient ing : list) {
         newRecipe.addIngredient(ing);
