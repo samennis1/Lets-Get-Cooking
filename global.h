@@ -38,7 +38,7 @@ public:
             result = query.value(idName);
             break;
         }
-        qDebug() << "GLOBAL PARSING:: FOUND " << result.toString();
+        query.previous();
         return result;
     }
 };

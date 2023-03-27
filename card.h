@@ -12,7 +12,8 @@ class Card : public QWidget
     Q_OBJECT
 
 public:
-    explicit Card(QWidget *parent = nullptr);
+    int id;
+    explicit Card(QWidget *parent = nullptr, QString recipeName = "", int id = 1);
     ~Card();
 
 private:
@@ -21,6 +22,7 @@ private:
     // QWidget interface
 protected:
     virtual void paintEvent(QPaintEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // CARD_H

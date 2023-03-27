@@ -25,11 +25,27 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>707</width>
+         <width>661</width>
          <height>525</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="CardsLayout"/>
+       <layout class="QVBoxLayout" name="CardsLayout">
+        <item>
+         <widget class="QLabel" name="noRecipes">
+          <property name="font">
+           <font>
+            <pointsize>30</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>No Recipes found! Let's Get Cooking!</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -51,7 +67,7 @@
       <item>
        <widget class="QPushButton" name="add">
         <property name="text">
-         <string>Add</string>
+         <string>New Recipe</string>
         </property>
        </widget>
       </item>

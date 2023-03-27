@@ -40,12 +40,8 @@ DBResultField DatabaseControl::executeAndRetrieve(QString queryString, QString f
     DBResultField result;
 
     if(saveQuery.exec()) {
-        int idName = saveQuery.record().indexOf(field);
-        while(saveQuery.next()) {
-            QString fieldGet = saveQuery.value(idName).toString();
-            result.success = true;
-            result.result = fieldGet;
-        }
+        result.success = true;
+        result.result = Global::parseFieldFromRecord(saveQuery, field).toString();
     } else {
         result.success = false;
     }
@@ -65,6 +61,7 @@ DBConditionalReturn DatabaseControl::findOrCreate(QString preQuery, QString post
         final.firstQueryData = std::move(valid.returnedData);
 
         if(final.firstQueryData.next()) {
+            qDebug() << "Find or create found some initial next data " << Global::parseFieldFromRecord(final.firstQueryData, "name");
             final.firstQueryData.previous();
             return final;
         }

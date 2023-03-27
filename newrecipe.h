@@ -19,6 +19,11 @@ public:
 private slots:
     void on_addIngredientButton_clicked();
 
+    void on_buttonBox_accepted();
+
+signals:
+    void recipeAdded();
+
 private:
     Ui::NewRecipe *ui;
 };

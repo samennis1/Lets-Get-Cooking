@@ -1,9 +1,12 @@
 #include "Ingredientslist.h"
 #include "global.h"
 
-IngredientsList::IngredientsList(QObject *parent)
+IngredientsList::IngredientsList(QObject *parent, QVector<Ingredient> ingredients)
     : QAbstractTableModel(parent)
 {
+    if(ingredients.size()) {
+        this->list = ingredients;
+    }
 }
 
 int IngredientsList::rowCount(const QModelIndex &parent) const
@@ -49,22 +52,26 @@ QVariant IngredientsList::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if(role == Qt::DisplayRole) {
-        Ingredient* getIngredient = this->list[index.row()];
+        Ingredient getIngredient = this->list[index.row()];
         if(index.column() == 0) {
-            return getIngredient->getName();
+            return getIngredient.getName();
         } else if(index.column() == 1) {
-            return getIngredient->getQuantity();
+            return getIngredient.getQuantity();
         } else if(index.column() == 2) {
-            return "€" + QString::number(getIngredient->totalPrice, 'f', 2);
+            return "€" + QString::number(getIngredient.totalPrice, 'f', 2);
         }
     }
 
     return QVariant();
 }
 
-void IngredientsList::addIngredient(Ingredient* ingredient) {
+void IngredientsList::addIngredient(Ingredient ingredient) {
     const int index = list.size();
     beginInsertRows(QModelIndex(), index, index);
     list.append(ingredient);
     endInsertRows();
+}
+
+QList<Ingredient> IngredientsList::getIngredients() {
+    return this->list;
 }

@@ -15,19 +15,19 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.setWindowTitle("Let's Get Cooking! v1.2.4");
-    Recipe sandwichRecipe("Sandwich2");
-    Recipe cakeRecipe("Cake");
-    Ingredient *eggs = new Ingredient("Eggs", 3, 5.00);
-    Ingredient *lettuce = new Ingredient("Lettuce", 1, 6.00);
-    sandwichRecipe += *eggs;
-    sandwichRecipe += *lettuce;
-    sandwichRecipe.listIngredients();
-    sandwichRecipe.addDietaryRestriction(Vegan);
-    qDebug() << sandwichRecipe.hasDietaryRestriction(Vegan);
+    w.setWindowTitle("Let's Get Cooking!");
+//    Recipe sandwichRecipe("Sandwich2");
+//    Recipe cakeRecipe("Cake");
+//    Ingredient *eggs = new Ingredient("Eggs", 3, 5.00);
+//    Ingredient *lettuce = new Ingredient("Lettuce", 1, 6.00);
+//    sandwichRecipe += *eggs;
+//    sandwichRecipe += *lettuce;
+//    sandwichRecipe.listIngredients();
+//    sandwichRecipe.addDietaryRestriction(Vegan);
+//    qDebug() << sandwichRecipe.hasDietaryRestriction(Vegan);
 
-    sandwichRecipe.preSave();
-    qDebug() << QString::fromStdString(Global::numberToString(sandwichRecipe.getTotalCost()));
+//    sandwichRecipe.preSave();
+//    qDebug() << QString::fromStdString(Global::numberToString(sandwichRecipe.getTotalCost()));
     w.show();
     return a.exec();
 }

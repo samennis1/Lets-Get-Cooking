@@ -6,31 +6,67 @@
 #include "databaseexception.h"
 
 using namespace std;
-Recipe::Recipe(string name)
+Recipe::Recipe(QString name)
 {
+    qDebug() << "NEW NON PASS!";
     QString checkExists = "SELECT * FROM Recipe WHERE name = :name";
     Global::queryBind(checkExists, ":name", name);
 
     QString query = "INSERT INTO Recipe (name) VALUES (:name);";
     Global::queryBind(query, ":name", name);
+    setup(checkExists, query);
+}
 
-    DBConditionalReturn runDBStatements = this->findOrCreate(checkExists, query);
+Recipe::Recipe(int id, QString fallbackName) {
+    qDebug() << "PASS ID AND NAME " << fallbackName;
+    QString checkExists = "SELECT * FROM Recipe WHERE id = :id";
+    Global::queryBind(checkExists, ":id", id);
 
-    if(runDBStatements.firstStatementWasExecuted && !runDBStatements.secondStatementWasExecuted) {
+    QString query = "INSERT INTO Recipe (name) VALUES (:name);";
+    Global::queryBind(query, ":name", fallbackName);
+    setup(checkExists, query);
+}
+
+void Recipe::setup(QString queryOne, QString queryTwo) {
+    qDebug() << "---- SETTING ----";
+    DBConditionalReturn runDBStatements = this->findOrCreate(queryOne, queryTwo);
+    bool anyRan = runDBStatements.firstStatementWasExecuted;
+    bool onlyFirst = runDBStatements.firstStatementWasExecuted && !runDBStatements.secondStatementWasExecuted;
+
+    if(onlyFirst) {
         qDebug() << "Only First Query ";
-        QSqlQuery recordData = std::move(runDBStatements.firstQueryData);
-        QVariant parseID = Global::parseFieldFromRecord(recordData, "id");
-        this->id = parseID.toInt();
-        qDebug() << "Set id to " << this->id;
     } else {
         qDebug() << "Both Queries";
-        DBRecordReturn run = this->execute(checkExists);
-        if(run.success) {
-            QVariant parseID = Global::parseFieldFromRecord(run.returnedData, "id");
-            this->id = parseID.toInt();
-            qDebug() << "Set id2 to " << this->id;
-        }
     }
+
+    if(!anyRan) return throw DatabaseException("Error connecting to database");
+
+    QSqlQuery recordData = std::move(onlyFirst ? runDBStatements.firstQueryData : runDBStatements.secondQueryData);
+    QVariant parseID = Global::parseFieldFromRecord(recordData, "id");
+    QVariant parsedName = Global::parseFieldFromRecord(recordData, "name");
+    this->name = parsedName.toString();
+    this->id = parseID.toInt();
+    qDebug() << "Set id to " << this->id;
+
+    qDebug() << "Set name to " << this->name;
+    qDebug() << "---- END ----";
+}
+
+void Recipe::fetchIngredients() {
+    QString query = "SELECT * FROM Ingredients WHERE recipe_id = :id";
+    Global::queryBind(query, ":id", this->id);
+    DBRecordReturn getIngredients = this->execute(query);
+   if(getIngredients.success) {
+       while(getIngredients.returnedData.next()) {
+           getIngredients.returnedData.previous();
+           QString name = Global::parseFieldFromRecord(getIngredients.returnedData, "name").toString();
+           int quantity = Global::parseFieldFromRecord(getIngredients.returnedData, "quantity").toInt();
+           double price = Global::parseFieldFromRecord(getIngredients.returnedData, "price").toDouble();
+
+           Ingredient* found = new Ingredient(name, quantity, price);
+           this->ingredients.push_back(*found);
+       }
+   }
 }
 
 Ingredient Recipe::addIngredient(Ingredient a) {
@@ -100,4 +136,8 @@ void Recipe::removeDietaryRestriction(DietaryRestriction restriction)
 bool Recipe::hasDietaryRestriction(DietaryRestriction restriction) const
 {
     return dietaryRestrictions_.test(restriction);
+}
+
+QString Recipe::getName() {
+    return this->name;
 }

@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "newrecipe.h"
+#include <qlist.h>
+#include "card.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,11 +17,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    bool displayingNoRecipeText = true;
 
 private slots:
     void on_add_clicked();
 
+public slots:
+    void onRecipeAdded();
+
 private:
     Ui::MainWindow *ui;
+    NewRecipe* newRecipeWindow;
+    QList<Card*> cards;
+    void reloadRecipes();
 };
 #endif // MAINWINDOW_H

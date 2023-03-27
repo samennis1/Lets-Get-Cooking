@@ -42,7 +42,7 @@
     <string>Recipe Name:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="recipeName">
    <property name="geometry">
     <rect>
      <x>110</x>
