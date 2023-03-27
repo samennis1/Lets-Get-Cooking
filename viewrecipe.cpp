@@ -2,7 +2,6 @@
 #include "ui_viewrecipe.h"
 #include "recipe.h"
 #include <QVector>
-#include "qvector.h"
 #include <iostream>
 
 ViewRecipe::ViewRecipe(QWidget *parent, int id, QString name) :
@@ -14,6 +13,7 @@ ViewRecipe::ViewRecipe(QWidget *parent, int id, QString name) :
     qDebug() << "NAME";
     qDebug() << viewedRecipe.getName();
     ui->recipeName->setText(viewedRecipe.getName());
+    // Deep Copy
     QVector<Ingredient> ingredientsRecipe(viewedRecipe.ingredients.begin(), viewedRecipe.ingredients.end());
     qDebug() << "Ingredient SIZE " << ingredientsRecipe.size();
     this->displayList = new IngredientsList(nullptr, ingredientsRecipe);
