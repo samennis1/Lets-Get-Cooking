@@ -8,7 +8,7 @@
 
 enum DietaryRestriction {
     None = 0,
-    Vegan = 1,
+    Vegan = 1 ,
     Vegetarian = 2,
     GlutenFree = 3,
     DairyFree = 4,
@@ -27,9 +27,10 @@ public:
     void fetchIngredients();
     bool removeIngredient(QString);
     void listIngredients();
-    void preSave();
+    void updateSQL();
     float getTotalCost();
     QString getName();
+    void setDietaryBits(QString);
 
     void addDietaryRestriction(DietaryRestriction restriction);
     void removeDietaryRestriction(DietaryRestriction restriction);
@@ -46,6 +47,7 @@ public:
     }
 private:
     std::bitset<5> dietaryRestrictions_;
+    const int dietaryPositions_[5] = {0, 1, 2, 3, 4};
     QString name;
 };
 
