@@ -29,7 +29,7 @@ DatabaseManager::DatabaseManager()
 
     QSqlQuery insert;
 
-    insert.prepare("CREATE TABLE IF NOT EXISTS Ingredient (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, quantity INTEGER NOT NULL, recipe_id INTEGER, FOREIGN KEY (recipe_id) REFERENCES Recipe(id));");
+    insert.prepare("CREATE TABLE IF NOT EXISTS Ingredient (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, quantity INTEGER NOT NULL, recipe_id INTEGER, price DOUBLE, FOREIGN KEY (recipe_id) REFERENCES Recipe(id));");
     if(insert.exec()) {
         cout << "Success 2" << endl;
     } else {
