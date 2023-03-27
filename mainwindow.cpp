@@ -11,10 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->noRecipes->show();
-    newRecipeWindow = new NewRecipe(this);
-
-    connect(newRecipeWindow, &NewRecipe::recipeAdded, this, &MainWindow::onRecipeAdded);
-    reloadRecipes();
+    onRecipeAdded();
 }
 
 MainWindow::~MainWindow()
@@ -31,6 +28,8 @@ void MainWindow::on_add_clicked()
 
 void MainWindow::onRecipeAdded()
 {
+    newRecipeWindow = new NewRecipe(this);
+    connect(newRecipeWindow, &NewRecipe::recipeAdded, this, &MainWindow::onRecipeAdded);
     reloadRecipes();
 }
 
