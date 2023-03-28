@@ -22,6 +22,8 @@ public:
 private slots:
     void on_add_clicked();
 
+    void on_exitButton_clicked();
+
 public slots:
     void onRecipeAdded();
 

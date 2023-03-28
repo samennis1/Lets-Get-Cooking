@@ -4,6 +4,7 @@
 #include "newrecipe.h"
 #include "databasecontrol.h"
 #include <QSqlQuery>
+#include "review.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,5 +62,14 @@ void MainWindow::reloadRecipes()
             result.returnedData.next();
         }
     }
+}
+
+
+void MainWindow::on_exitButton_clicked()
+{
+    Review r;
+    r.setModal(true);
+    close();
+    r.exec();
 }
 

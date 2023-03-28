@@ -21,11 +21,9 @@ DBRecordReturn DatabaseControl::execute(QString queryString) {
     qDebug() << "Executing... " << saveQuery.lastQuery();
 
     if(saveQuery.exec()) {
-        qDebug() << "Exec!";
         returnData.returnedData = std::move(saveQuery);
         returnData.success = true;
     } else {
-        qDebug() << "Nein!";
         returnData.success = false;
     }
 
