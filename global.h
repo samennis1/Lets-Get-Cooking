@@ -6,7 +6,6 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-
 using namespace std;
 
 class Global

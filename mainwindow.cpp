@@ -1,16 +1,26 @@
 #include "mainwindow.h"
+#include "QtGui/qpainter.h"
 #include "ui_mainwindow.h"
 #include "card.h"
 #include "newrecipe.h"
 #include "databasecontrol.h"
 #include <QSqlQuery>
 #include "review.h"
+#include "about.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    this->aboutAction = new QAction(0);
+    this->aboutAction->setMenuRole(QAction::AboutRole);
     ui->setupUi(this);
+    QMenuBar* mainMenuBar = new QMenuBar(0);
+    QMenu* mainMenu = new QMenu(0);
+    mainMenuBar->addMenu(mainMenu);
+    mainMenu->addAction(aboutAction);
+    setMenuBar(mainMenuBar);
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::showAboutDialog);
     ui->noRecipes->show();
     onRecipeAdded();
 }
@@ -71,5 +81,20 @@ void MainWindow::on_exitButton_clicked()
     r.setModal(true);
     close();
     r.exec();
+}
+
+
+void MainWindow::on_actionNew_Recipe_triggered()
+{
+    About about;
+    about.setModal(true);
+    about.exec();
+}
+
+void MainWindow::showAboutDialog()
+{
+    About about;
+    about.setModal(true);
+    about.exec();
 }
 
