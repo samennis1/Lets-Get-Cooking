@@ -56,11 +56,13 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
 }
 
 void Recipe::setDietaryBits(QString bits) {
-    for(int i = 0; i < bits.size(); i++) {
-        QChar b = bits[i];
+    qDebug() << "PASSSED " << bits;
+    for(int i = 1; i <= bits.size(); i++) {
+        QChar b = bits[i - 1];  // Adjust index to start at 0
         int bite = b.digitValue();
+        qDebug() << "BIT " << b << " VALUE " << bite;
         if(bite > 0) {
-            addDietaryRestriction((DietaryRestriction) (i+1));
+            addDietaryRestriction((DietaryRestriction) (i));
         }
     }
 }
@@ -124,7 +126,8 @@ void Recipe::listIngredients() {
 
 void Recipe::updateSQL() {
     QString query = "UPDATE Recipe SET dietaryBits = :bitValue WHERE id = :id";
-    Global::queryBind(query, ":bitValue", std::stoi(this->dietaryRestrictions_.to_string()));
+    QString bits = QString::fromStdString(this->dietaryRestrictions_.to_string());
+    Global::queryBind(query, ":bitValue", bits);
     Global::queryBind(query, ":id", this->id);
     this->execute(query);
 }
@@ -140,8 +143,9 @@ float Recipe::getTotalCost() {
 
 void Recipe::addDietaryRestriction(DietaryRestriction restriction)
 {
+    if(restriction == None) return;
     dietaryRestrictions_.set(dietaryPositions_[restriction - 1]);
-    qDebug() << QString::fromStdString(dietaryRestrictions_.to_string());
+    qDebug() << "ADD RESTRICTION..." << QString::fromStdString(dietaryRestrictions_.to_string());
 }
 
 void Recipe::removeDietaryRestriction(DietaryRestriction restriction)
