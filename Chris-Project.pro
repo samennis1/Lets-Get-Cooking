@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     Ingredientslist.cpp \
+    about.cpp \
     card.cpp \
     databasecontrol.cpp \
     databasemanager.cpp \
@@ -20,10 +21,12 @@ SOURCES += \
     mainwindow.cpp \
     newrecipe.cpp \
     recipe.cpp \
+    review.cpp \
     viewrecipe.cpp
 
 HEADERS += \
     Ingredientslist.h \
+    about.h \
     card.h \
     databasecontrol.h \
     databaseexception.h \
@@ -33,12 +36,15 @@ HEADERS += \
     mainwindow.h \
     newrecipe.h \
     recipe.h \
+    review.h \
     viewrecipe.h
 
 FORMS += \
+    about.ui \
     card.ui \
     mainwindow.ui \
     newrecipe.ui \
+    review.ui \
     viewrecipe.ui
 
 # Default rules for deployment.
@@ -46,6 +52,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    ../Downloads/cookbook.png \
-    cookbook.png
+DISTFILES += logo.png
+
+RESOURCES += \
+    resources.qrc
