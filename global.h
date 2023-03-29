@@ -11,7 +11,7 @@ using namespace std;
 class Global
 {
 public:
-    Global();
+    Global() {};
     QDir dir;
     QString path = QDir::currentPath() + "/database.sqlite";
     template <typename T>

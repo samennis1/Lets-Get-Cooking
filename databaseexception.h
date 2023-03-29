@@ -7,10 +7,10 @@ using namespace std;
 class DatabaseException : public MainException
 {
 public:
-    DatabaseException(const string& message) : message_(message) {}
+    DatabaseException(const string& message) : message_(message) {};
     void log() {
         cout << this->message_;
     }
 private:
-    std::string message_;
+    string message_;
 };
