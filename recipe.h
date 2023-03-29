@@ -46,7 +46,7 @@ public:
         qDebug() << "Destructuring";
     }
 private:
-    std::bitset<5> dietaryRestrictions_;
+    std::bitset<5> dietaryRestrictions_{0};
     const int dietaryPositions_[5] = {0, 1, 2, 3, 4};
     QString name;
 };
