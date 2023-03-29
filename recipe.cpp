@@ -144,7 +144,7 @@ float Recipe::getTotalCost() {
 void Recipe::addDietaryRestriction(DietaryRestriction restriction)
 {
     if(restriction == None) return;
-    dietaryRestrictions_.set(dietaryPositions_[restriction - 1]);
+    dietaryRestrictions_.set(dietaryPositions_[restriction]);
     qDebug() << "ADD RESTRICTION..." << QString::fromStdString(dietaryRestrictions_.to_string());
 }
 
