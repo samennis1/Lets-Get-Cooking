@@ -15,6 +15,9 @@ public:
     explicit Review(QWidget *parent = nullptr);
     ~Review();
 
+private slots:
+    void on_slide_valueChanged(int value);
+
 private:
     Ui::Review *ui;
 };

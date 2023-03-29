@@ -12,3 +12,9 @@ Review::~Review()
 {
     delete ui;
 }
+
+void Review::on_slide_valueChanged(int value)
+{
+    ui->changenum->setText(QString::fromStdString(std::to_string(value)) + "%");
+}
+
