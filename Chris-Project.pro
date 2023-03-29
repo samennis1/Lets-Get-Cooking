@@ -15,7 +15,6 @@ SOURCES += \
     card.cpp \
     databasecontrol.cpp \
     databasemanager.cpp \
-    global.cpp \
     ingredient.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -33,6 +32,7 @@ HEADERS += \
     databasemanager.h \
     global.h \
     ingredient.h \
+    mainexception.h \
     mainwindow.h \
     newrecipe.h \
     recipe.h \
