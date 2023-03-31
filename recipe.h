@@ -7,13 +7,13 @@
 #include <bitset>
 
 enum DietaryRestriction {
-    None = 0,
-    Vegan = 1 ,
-    Vegetarian = 2,
-    GlutenFree = 3,
-    DairyFree = 4,
-    NutFree = 5
+    Vegan = 0,
+    Vegetarian = 1,
+    GlutenFree = 2,
+    DairyFree = 3,
+    NutFree = 4
 };
+
 
 using namespace std;
 class Recipe : public DatabaseControl
@@ -47,7 +47,13 @@ public:
     }
 private:
     std::bitset<5> dietaryRestrictions_{0};
-    const int dietaryPositions_[5] = {0, 1, 2, 3, 4};
+    std::map<DietaryRestriction, int> dietaryPositions_ = {
+        {Vegan, 0},
+        {Vegetarian, 1},
+        {GlutenFree, 2},
+        {DairyFree, 3},
+        {NutFree, 4}
+    };
     QString name;
 };
 

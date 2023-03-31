@@ -41,18 +41,27 @@ void NewRecipe::on_buttonBox_accepted()
     QString name = this->ui->recipeName->text();
     Recipe newRecipe(name);
     QVector<Ingredient> list = this->displayList->getIngredients().toVector();
-    int isVegan = this->ui->veganBox->checkState() ? Vegan : None;
-    int isVeg = this->ui->vegBox->checkState() ? Vegetarian : None;
-    int isGlutenFree = this->ui->glutenBox->checkState() ? GlutenFree : None;
-    int isDairyFree = this->ui->dairyBox->checkState() ? DairyFree : None;
-    int isNutFree = this->ui->nutBox->checkState() ? NutFree : None;
+    int isVegan = this->ui->veganBox->checkState() ? Vegan : -1;
+    int isVeg = this->ui->vegBox->checkState() ? Vegetarian : -1;
+    int isGlutenFree = this->ui->glutenBox->checkState() ? GlutenFree : -1;
+    int isDairyFree = this->ui->dairyBox->checkState() ? DairyFree : -1;
+    int isNutFree = this->ui->nutBox->checkState() ? NutFree : -1;
 
-    int dietary[5] = {isVegan, isVeg, isGlutenFree, isDairyFree, isNutFree};
+    if (isVegan != -1)
+        newRecipe.addDietaryRestriction(Vegan);
 
-    for(int d : dietary) {
-        qDebug() << "Passing " << d;
-        newRecipe.addDietaryRestriction((DietaryRestriction) d);
-    }
+    if (isVeg != -1)
+        newRecipe.addDietaryRestriction(Vegetarian);
+
+    if (isGlutenFree != -1)
+        newRecipe.addDietaryRestriction(GlutenFree);
+
+    if (isDairyFree != -1)
+        newRecipe.addDietaryRestriction(DairyFree);
+
+    if (isNutFree != -1)
+        newRecipe.addDietaryRestriction(NutFree);
+
 
     newRecipe.updateSQL();
 

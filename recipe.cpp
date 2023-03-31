@@ -57,13 +57,16 @@ void Recipe::setup(QString queryOne, QString queryTwo) {
 
 void Recipe::setDietaryBits(QString bits) {
     qDebug() << "PASSSED " << bits;
-    for(int i = 1; i <= bits.size(); i++) {
-        QChar b = bits[i - 1];  // Adjust index to start at 0
+    int x = 0;
+    for(int i = bits.size()-1; i >= 0; i--) {
+        QChar b = bits[i];  // Adjust index to start at 0
         int bite = b.digitValue();
         qDebug() << "BIT " << b << " VALUE " << bite;
         if(bite > 0) {
-            addDietaryRestriction((DietaryRestriction) (i));
+            qDebug() << "Passing " << 6-i << "  ";
+            addDietaryRestriction((DietaryRestriction) (x));
         }
+        x++;
     }
 }
 
@@ -71,30 +74,30 @@ void Recipe::fetchIngredients() {
     QString query = "SELECT * FROM Ingredient WHERE recipe_id = :id";
     Global::queryBind(query, ":id", this->id);
     DBRecordReturn getIngredients = this->execute(query);
-   if(getIngredients.success) {
-       while(getIngredients.returnedData.next()) {
-           getIngredients.returnedData.previous();
-           QString name = Global::parseFieldFromRecord(getIngredients.returnedData, "name").toString();
-           int quantity = Global::parseFieldFromRecord(getIngredients.returnedData, "quantity").toInt();
-           double price = Global::parseFieldFromRecord(getIngredients.returnedData, "price").toDouble();
+    if(getIngredients.success) {
+        while(getIngredients.returnedData.next()) {
+            getIngredients.returnedData.previous();
+            QString name = Global::parseFieldFromRecord(getIngredients.returnedData, "name").toString();
+            int quantity = Global::parseFieldFromRecord(getIngredients.returnedData, "quantity").toInt();
+            double price = Global::parseFieldFromRecord(getIngredients.returnedData, "price").toDouble();
 
-           Ingredient* found = new Ingredient(name, quantity, price);
-           this->ingredients.push_back(*found);
-           qDebug() << "ADDING INGREDIENT " << name << price;
-           getIngredients.returnedData.next();
-       }
-   }
+            Ingredient* found = new Ingredient(name, quantity, price);
+            this->ingredients.push_back(*found);
+            qDebug() << "ADDING INGREDIENT " << name << price;
+            getIngredients.returnedData.next();
+        }
+    }
 }
 
 Ingredient Recipe::addIngredient(Ingredient a) {
-   ingredients.push_back(a);
-   QString query = "INSERT INTO Ingredient (name, quantity, recipe_id, price) VALUES (:name, :quantity, :recipe_id, :price)";
-   Global::queryBind(query, ":name", a.getName());
-   Global::queryBind(query, ":quantity", a.getQuantity());
-   Global::queryBind(query, ":recipe_id", this->id);
-   Global::queryBind(query, ":price", a.totalPrice);
-   this->execute(query);
-   return a;
+    ingredients.push_back(a);
+    QString query = "INSERT INTO Ingredient (name, quantity, recipe_id, price) VALUES (:name, :quantity, :recipe_id, :price)";
+    Global::queryBind(query, ":name", a.getName());
+    Global::queryBind(query, ":quantity", a.getQuantity());
+    Global::queryBind(query, ":recipe_id", this->id);
+    Global::queryBind(query, ":price", a.totalPrice);
+    this->execute(query);
+    return a;
 }
 
 Recipe Recipe::operator+=(Ingredient const& a) {
@@ -104,15 +107,15 @@ Recipe Recipe::operator+=(Ingredient const& a) {
 
 bool Recipe::removeIngredient(QString name) {
     bool foundAndDeleted = false;
-   for(vector<Ingredient>::iterator i = ingredients.begin(); i != ingredients.end(); i++) {
-       if(i->getName() == name) {
-           ingredients.erase(i);
-           foundAndDeleted = true;
-           break;
-       }
-   }
+    for(vector<Ingredient>::iterator i = ingredients.begin(); i != ingredients.end(); i++) {
+        if(i->getName() == name) {
+            ingredients.erase(i);
+            foundAndDeleted = true;
+            break;
+        }
+    }
 
-   return foundAndDeleted;
+    return foundAndDeleted;
 }
 
 void Recipe::listIngredients() {
@@ -143,20 +146,29 @@ float Recipe::getTotalCost() {
 
 void Recipe::addDietaryRestriction(DietaryRestriction restriction)
 {
-    if(restriction == None) return;
-    dietaryRestrictions_.set(dietaryPositions_[restriction]);
+    qDebug() << "ADDRESS OF DIETARY " << &dietaryRestrictions_;
+    qDebug() << "PRE..." << QString::fromStdString(dietaryRestrictions_.to_string());
+    qDebug() << "ADDING... " << restriction;
+    int pos = dietaryPositions_[restriction];
+    dietaryRestrictions_.set(pos);
     qDebug() << "ADD RESTRICTION..." << QString::fromStdString(dietaryRestrictions_.to_string());
+    qDebug() << "ADDRESS OF DIETARY " << &dietaryRestrictions_;
 }
+
+
+
 
 void Recipe::removeDietaryRestriction(DietaryRestriction restriction)
 {
-    dietaryRestrictions_.reset(dietaryPositions_[restriction - 1]);
+    dietaryRestrictions_.reset(restriction);
 }
 
 bool Recipe::hasDietaryRestriction(DietaryRestriction restriction) const
 {
-    return dietaryRestrictions_.test(dietaryPositions_[restriction - 1]);
+    int pos = dietaryPositions_.at(restriction);
+    return dietaryRestrictions_.test(pos);
 }
+
 
 QString Recipe::getName() {
     return this->name;

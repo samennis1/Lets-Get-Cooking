@@ -21,14 +21,18 @@ ViewRecipe::ViewRecipe(QWidget *parent, int id, QString name) :
     //VVGDN
     QList<QCheckBox*> list = {ui->veganBox, ui->vegBox, ui->glutenBox, ui->dairyBox, ui->nutBox};
 
-    for(int i = 0 ; i < list.size(); i++) {
-        int set = viewedRecipe.hasDietaryRestriction((DietaryRestriction) (i+1));
-        if(set) {
-            qDebug() << "Running " << i;
-            list.at(i)->setCheckable(true);
-            list.at(i)->setChecked(true);
+    for (const auto& [restriction, index] : viewedRecipe.dietaryPositions_) {
+        int set = viewedRecipe.hasDietaryRestriction(restriction);
+        if (set) {
+            qDebug() << "Checking checkbox for " << index;
+            list.at(index)->setCheckable(true);
+            list.at(index)->setChecked(true);
         }
     }
+
+
+
+
 }
 
 ViewRecipe::~ViewRecipe()
