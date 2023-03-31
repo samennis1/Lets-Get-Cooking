@@ -18,7 +18,6 @@ Card::~Card()
     delete ui;
 }
 
-// just to draw a border. could also use stylesheet
 void Card::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);

@@ -1,5 +1,4 @@
 #include "recipe.h"
-#include "iostream"
 #include <unordered_set>
 #include <qsqlquery.h>
 #include <QSqlRecord>
