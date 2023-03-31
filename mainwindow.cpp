@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "QtGui/qpainter.h"
+#include "qmenubar.h"
 #include "ui_mainwindow.h"
 #include "card.h"
 #include "newrecipe.h"
@@ -12,17 +13,30 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+    ui->noRecipes->show();
+    onRecipeAdded();
     this->aboutAction = new QAction(0);
     this->aboutAction->setMenuRole(QAction::AboutRole);
-    ui->setupUi(this);
+
+#ifdef Q_OS_MAC
     QMenuBar* mainMenuBar = new QMenuBar(0);
     QMenu* mainMenu = new QMenu(0);
     mainMenuBar->addMenu(mainMenu);
     mainMenu->addAction(aboutAction);
+    mainMenuBar->setVisible((true));
+    qDebug() << mainMenuBar->isVisible() << mainMenuBar->isEnabled();
     setMenuBar(mainMenuBar);
     connect(aboutAction, &QAction::triggered, this, &MainWindow::showAboutDialog);
-    ui->noRecipes->show();
-    onRecipeAdded();
+    #else
+    QMenuBar* mainMenuBar = ui->menuBar;
+    QMenu* mainMenu = mainMenuBar->addMenu(tr("&File"));
+    QAction* aboutAction = new QAction(tr("&About"), this);
+    mainMenu->addAction(aboutAction);
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::showAboutDialog);
+
+#endif
+
 }
 
 MainWindow::~MainWindow()
